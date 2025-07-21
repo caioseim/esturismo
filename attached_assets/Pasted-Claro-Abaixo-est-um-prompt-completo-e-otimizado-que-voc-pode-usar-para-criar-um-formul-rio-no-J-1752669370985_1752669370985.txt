@@ -1,0 +1,74 @@
+Claro! Abaixo está um prompt completo e otimizado que você pode usar para criar um formulário no **Jotform** que será usado para **cadastrar motoristas de ônibus da empresa ES Turismo**. O formulário permite **anexar documentos e fotos**, e **preencher dados pessoais e profissionais**, além de **holerite por mês/ano**. Ele pode ser configurado para salvar os envios **no próprio PC** se você usar a opção de **baixar automaticamente os envios como PDF** ou integrar com uma **pasta sincronizada localmente (como Dropbox ou Google Drive + Drive Sync).**
+
+---
+
+### ✅ **Prompt para Jotform (Cadastro de Motorista - ES Turismo)**
+
+> **Título do Formulário:**
+> **Cadastro de Motorista - ES Turismo**
+
+> **Descrição inicial:**
+> Preencha o formulário abaixo para cadastrar um novo motorista da empresa ES Turismo. Anexe todos os documentos obrigatórios. Os dados serão usados exclusivamente para fins administrativos.
+
+---
+
+### 📸 **Foto do Motorista**
+
+* **Campo:** Upload de imagem
+* **Instrução:** Faça upload de uma foto nítida do rosto do motorista.
+
+---
+
+### 📄 **Documentos (PDF ou Imagem)**
+
+* **Campo:** Upload múltiplo
+* **Subcampos:**
+
+  * CNH (Carteira Nacional de Habilitação)
+  * Curso de Transporte de Passageiros
+  * Comprovante de Residência
+
+---
+
+### 📝 **Dados Pessoais**
+
+* **Nome Completo:** (Campo de texto longo)
+* **Data de Nascimento:** (Campo de data)
+* **CPF:** (Campo de número formatado)
+* **Número de Celular:** (Campo de telefone com máscara +55)
+
+---
+
+### 🕓 **Validade dos Documentos**
+
+* **Validade da CNH:** (Campo de data)
+* **Validade do Curso de Passageiro:** (Campo de data)
+
+---
+
+### 📆 **Holerite**
+
+* **Ano:** (Campo suspenso com opções 2023, 2024, 2025...)
+* **Mês:** (Campo suspenso com opções: Janeiro a Dezembro)
+* **Upload do Holerite:** (Campo de upload de PDF ou imagem)
+
+---
+
+### 💾 **Armazenamento local**
+
+* **Instruções técnicas para você salvar no seu PC:**
+
+  * No **Painel do Jotform**, ative o **Download Automático de PDFs** ou crie uma **integração com Google Drive/Dropbox** e use um app de sincronização de pastas (como o Google Drive para Desktop ou Dropbox Client).
+  * Crie uma **estrutura de pastas por motorista ou por ano/mês** para manter os arquivos organizados.
+
+---
+
+### 🔐 **Privacidade**
+
+Adicione uma nota:
+
+> 🔒 Todas as informações fornecidas neste formulário serão mantidas em segurança e utilizadas apenas para fins internos da ES Turismo.
+
+---
+
+Se quiser, posso montar um modelo JSON do Jotform para você importar direto, ou te ajudar a configurar esse formulário visualmente. Deseja isso também?

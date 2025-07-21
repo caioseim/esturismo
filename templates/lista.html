@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Motoristas - ES Turismo{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4><i class="fas fa-users"></i> Lista de Motoristas</h4>
+                <a href="{{ url_for('cadastro') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Novo Motorista
+                </a>
+            </div>
+            <div class="card-body">
+                <!-- Filtros -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Buscar por nome ou CPF...">
+                            <button class="btn btn-outline-secondary" type="button" id="searchBtn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="statusFilter">
+                            <option value="">Todos os status</option>
+                            <option value="ok">Documentos OK</option>
+                            <option value="vencendo">Documentos vencendo</option>
+                            <option value="vencido">Documentos vencidos</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="vinculoFilter">
+                            <option value="">Todos os vínculos</option>
+                            <option value="registrado">Registrado</option>
+                            <option value="freelancer">Freelancer</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tabela -->
+                {% if motoristas %}
+                <div class="table-responsive">
+                    <table class="table table-hover" id="motoristasTable">
+                        <thead>
+                            <tr>
+                                <th>Foto</th>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>Celular</th>
+                                <th>Vínculo</th>
+                                <th>Status</th>
+                                <th>Status CNH</th>
+                                <th>Status Curso</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for motorista in motoristas %}
+                            <tr {% if motorista.status != 'ativo' %}style="opacity: 0.6;"{% endif %}>
+                                <td>
+                                    {% if motorista.arquivos.get('foto') %}
+                                        <img src="{{ url_for('download_arquivo', id=motorista.id, tipo='foto', arquivo=motorista.arquivos.foto) }}" 
+                                             class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" 
+                                             style="width: 40px; height: 40px;">
+                                            <i class="fas fa-user text-muted"></i>
+                                        </div>
+                                    {% endif %}
+                                </td>
+                                <td>{{ motorista.nome }}</td>
+                                <td>{{ motorista.cpf }}</td>
+                                <td>{{ motorista.celular }}</td>
+                                <td>
+                                    {% if motorista.tipo_vinculo == 'registrado' %}
+                                        <span class="badge bg-success">Registrado</span>
+                                    {% elif motorista.tipo_vinculo == 'freelancer' %}
+                                        <span class="badge bg-info">Freelancer</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if motorista.status == 'ativo' %}
+                                        <span class="badge bg-success">Ativo</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Inativo</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if motorista.status_cnh == 'ok' %}
+                                        <span class="badge bg-success">OK</span>
+                                    {% elif motorista.status_cnh == 'vencendo' %}
+                                        <span class="badge bg-warning">Vencendo</span>
+                                    {% elif motorista.status_cnh == 'vencido' %}
+                                        <span class="badge bg-danger">Vencido</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if motorista.status_curso == 'ok' %}
+                                        <span class="badge bg-success">OK</span>
+                                    {% elif motorista.status_curso == 'vencendo' %}
+                                        <span class="badge bg-warning">Vencendo</span>
+                                    {% elif motorista.status_curso == 'vencido' %}
+                                        <span class="badge bg-danger">Vencido</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('motorista', id=motorista.id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i> Ver
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                    <h5>Nenhum motorista cadastrado</h5>
+                    <p class="text-muted">Comece cadastrando o primeiro motorista.</p>
+                    <a href="{{ url_for('cadastro') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Cadastrar Motorista
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const table = document.getElementById('motoristasTable');
+    
+    if (table) {
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        
+        function filterTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const statusValue = statusFilter.value;
+            const vinculoValue = vinculoFilter.value;
+            
+            rows.forEach(row => {
+                const nome = row.cells[1].textContent.toLowerCase();
+                const cpf = row.cells[2].textContent.toLowerCase();
+                const vinculo = row.cells[4].textContent.toLowerCase();
+                const statusCnh = row.cells[6].textContent.toLowerCase();
+                const statusCurso = row.cells[7].textContent.toLowerCase();
+                
+                const matchesSearch = nome.includes(searchTerm) || cpf.includes(searchTerm);
+                
+                let matchesStatus = true;
+                if (statusValue) {
+                    matchesStatus = statusCnh.includes(statusValue) || statusCurso.includes(statusValue);
+                }
+                
+                let matchesVinculo = true;
+                if (vinculoValue) {
+                    matchesVinculo = vinculo.includes(vinculoValue);
+                }
+                
+                row.style.display = matchesSearch && matchesStatus && matchesVinculo ? '' : 'none';
+            });
+        }
+        
+        const vinculoFilter = document.getElementById('vinculoFilter');
+        
+        searchInput.addEventListener('input', filterTable);
+        statusFilter.addEventListener('change', filterTable);
+        vinculoFilter.addEventListener('change', filterTable);
+    }
+});
+</script>
+{% endblock %}

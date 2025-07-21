@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block title %}{{ motorista.nome }} - ES Turismo{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <!-- Foto e Informações Básicas -->
+        <div class="card">
+            <div class="card-body text-center">
+                {% if motorista.arquivos.get('foto') %}
+                    <img src="{{ url_for('download_arquivo', id=motorista.id, tipo='foto', arquivo=motorista.arquivos.foto) }}" 
+                         class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" 
+                         style="width: 150px; height: 150px;">
+                        <i class="fas fa-user fa-4x text-muted"></i>
+                    </div>
+                {% endif %}
+                <h4>{{ motorista.nome }}</h4>
+                <p class="text-muted">{{ motorista.cpf }}</p>
+                <p class="text-muted">{{ motorista.celular }}</p>
+            </div>
+        </div>
+
+        <!-- Alertas -->
+        {% if alertas %}
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6><i class="fas fa-exclamation-triangle"></i> Alertas</h6>
+            </div>
+            <div class="card-body">
+                {% for alerta, tipo in alertas %}
+                    <div class="alert alert-{{ tipo }} alert-sm mb-2">
+                        {{ alerta }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-8">
+        <!-- Dados Pessoais -->
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-user"></i> Dados Pessoais</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Nome:</strong> {{ motorista.nome }}</p>
+                        <p><strong>CPF:</strong> {{ motorista.cpf }}</p>
+                        <p><strong>Data de Nascimento:</strong> {{ motorista.data_nascimento }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Celular:</strong> {{ motorista.celular }}</p>
+                        <p><strong>Tipo de Vínculo:</strong> 
+                            {% if motorista.tipo_vinculo == 'registrado' %}
+                                <span class="badge bg-success">Registrado na Empresa</span>
+                            {% elif motorista.tipo_vinculo == 'freelancer' %}
+                                <span class="badge bg-info">Freelancer</span>
+                            {% endif %}
+                        </p>
+                        <p><strong>Status:</strong> 
+                            {% if motorista.status == 'ativo' %}
+                                <span class="badge bg-success">Ativo</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Inativo</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documentos -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5><i class="fas fa-file-alt"></i> Documentos</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>CNH</h6>
+                        {% if motorista.arquivos.get('cnh') %}
+                            <a href="{{ url_for('download_arquivo', id=motorista.id, tipo='documento', arquivo=motorista.arquivos.cnh) }}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        {% else %}
+                            <p class="text-muted">Não enviado</p>
+                        {% endif %}
+                        <p><strong>Validade:</strong> {{ motorista.validade_cnh }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Curso de Passageiros</h6>
+                        {% if motorista.arquivos.get('curso_passageiro') %}
+                            <a href="{{ url_for('download_arquivo', id=motorista.id, tipo='documento', arquivo=motorista.arquivos.curso_passageiro) }}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        {% else %}
+                            <p class="text-muted">Não enviado</p>
+                        {% endif %}
+                        <p><strong>Validade:</strong> {{ motorista.validade_curso }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Comprovante de Residência</h6>
+                        {% if motorista.arquivos.get('comprovante_residencia') %}
+                            <a href="{{ url_for('download_arquivo', id=motorista.id, tipo='documento', arquivo=motorista.arquivos.comprovante_residencia) }}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        {% else %}
+                            <p class="text-muted">Não enviado</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Holerites -->
+        <div class="card mt-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5><i class="fas fa-money-bill-wave"></i> Holerites</h5>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#holerite-modal">
+                    <i class="fas fa-plus"></i> Adicionar Holerite
+                </button>
+            </div>
+            <div class="card-body">
+                {% if holerites %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Ano</th>
+                                    <th>Mês</th>
+                                    <th>Arquivo</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for holerite in holerites %}
+                                <tr>
+                                    <td>{{ holerite.ano }}</td>
+                                    <td>{{ holerite.mes }}</td>
+                                    <td>{{ holerite.arquivo }}</td>
+                                    <td>
+                                        <a href="{{ url_for('download_arquivo', id=motorista.id, tipo='holerite', arquivo=holerite.path) }}" 
+                                           class="btn btn-sm btn-outline-primary" title="Baixar holerite">
+                                            <i class="fas fa-download"></i> Download
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Nenhum holerite cadastrado</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Upload de Holerite -->
+<div class="modal fade" id="holerite-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Adicionar Holerite</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="holerite-form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="ano" class="form-label">Ano</label>
+                                <select class="form-select" id="ano" name="ano" required>
+                                    <option value="">Selecione o ano</option>
+                                    {% for year in range(2020, 2030) %}
+                                        <option value="{{ year }}" {% if year == 2025 %}selected{% endif %}>{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="mes" class="form-label">Mês</label>
+                                <select class="form-select" id="mes" name="mes" required>
+                                    <option value="">Selecione o mês</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="holerite" class="form-label">Arquivo do Holerite</label>
+                        <input type="file" class="form-control" id="holerite" name="holerite" accept=".pdf,image/*" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="uploadHolerite()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between mt-4">
+    <a href="{{ url_for('lista') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Voltar à Lista
+    </a>
+    <div>
+        {% if motorista.status == 'ativo' %}
+            <button class="btn btn-warning me-2" onclick="toggleStatus('{{ motorista.id }}', 'inativo')">
+                <i class="fas fa-pause"></i> Desativar Motorista
+            </button>
+        {% else %}
+            <button class="btn btn-success me-2" onclick="toggleStatus('{{ motorista.id }}', 'ativo')">
+                <i class="fas fa-play"></i> Ativar Motorista
+            </button>
+        {% endif %}
+        <button class="btn btn-danger" onclick="deleteMotorista('{{ motorista.id }}')">
+            <i class="fas fa-trash"></i> Excluir Motorista
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function uploadHolerite() {
+    const form = document.getElementById('holerite-form');
+    const formData = new FormData(form);
+    
+    fetch(`/upload_holerite/{{ motorista.id }}`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Holerite enviado com sucesso!');
+            location.reload();
+        } else {
+            alert('Erro: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        alert('Erro ao enviar holerite');
+    });
+}
+
+function toggleStatus(motoristaId, novoStatus) {
+    const acao = novoStatus === 'ativo' ? 'ativar' : 'desativar';
+    
+    if (confirm(`Tem certeza que deseja ${acao} este motorista?`)) {
+        fetch(`/toggle_status/${motoristaId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: novoStatus })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert('Erro: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao alterar status');
+        });
+    }
+}
+
+function deleteMotorista(motoristaId) {
+    if (confirm('ATENÇÃO: Esta ação irá excluir permanentemente o motorista e todos os seus dados (fotos, documentos, holerites). Tem certeza?')) {
+        if (confirm('Confirma a exclusão? Esta ação não pode ser desfeita.')) {
+            fetch(`/delete_motorista/${motoristaId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Motorista excluído com sucesso!');
+                    window.location.href = '/lista';
+                } else {
+                    alert('Erro: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao excluir motorista');
+            });
+        }
+    }
+}
+</script>
+{% endblock %}

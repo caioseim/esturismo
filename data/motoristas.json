@@ -1,0 +1,38 @@
+[
+  {
+    "id": "5b891074-8a00-4bfb-9e4f-e1883e168bbe",
+    "nome": "Antoni Costa Ned",
+    "data_nascimento": "1980-08-15",
+    "cpf": "08991428770",
+    "celular": "(21) 98966-9405",
+    "tipo_vinculo": "freelancer",
+    "validade_cnh": "2031-06-22",
+    "validade_curso": "2026-10-03",
+    "data_cadastro": "2025-07-17T10:00:15.394478",
+    "status": "ativo",
+    "arquivos": {
+      "foto": "foto_5b891074-8a00-4bfb-9e4f-e1883e168bbe.jpeg",
+      "cnh": "cnh_5b891074-8a00-4bfb-9e4f-e1883e168bbe.pdf",
+      "curso_passageiro": "curso_passageiro_5b891074-8a00-4bfb-9e4f-e1883e168bbe.jpeg",
+      "comprovante_residencia": "comprovante_residencia_5b891074-8a00-4bfb-9e4f-e1883e168bbe.jpeg"
+    }
+  },
+  {
+    "id": "7dff775c-af11-44a2-92a3-eb8d7c45912e",
+    "nome": "Levi Elias Silva",
+    "data_nascimento": "1972-03-07",
+    "cpf": "01500751707",
+    "celular": "(21) 96684-2882",
+    "tipo_vinculo": "freelancer",
+    "validade_cnh": "2027-11-24",
+    "validade_curso": "2027-11-29",
+    "data_cadastro": "2025-07-17T10:24:44.756109",
+    "status": "ativo",
+    "arquivos": {
+      "foto": "foto_7dff775c-af11-44a2-92a3-eb8d7c45912e.jpeg",
+      "cnh": "cnh_7dff775c-af11-44a2-92a3-eb8d7c45912e.pdf",
+      "curso_passageiro": "curso_passageiro_7dff775c-af11-44a2-92a3-eb8d7c45912e.pdf",
+      "comprovante_residencia": "comprovante_residencia_7dff775c-af11-44a2-92a3-eb8d7c45912e.pdf"
+    }
+  }
+]

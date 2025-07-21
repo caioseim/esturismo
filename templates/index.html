@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="jumbotron bg-primary text-white rounded p-4 mb-4">
+            <h1 class="display-4"><i class="fas fa-bus"></i> ES Turismo</h1>
+            <p class="lead">Sistema de Cadastro de Motoristas</p>
+            <hr class="my-4">
+            <p>Gerencie os motoristas da sua empresa com facilidade e segurança.</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ stats.total_motoristas }}</h4>
+                        <small>Total de Motoristas</small>
+                    </div>
+                    <div>
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ stats.documentos_vencidos }}</h4>
+                        <small>Documentos Vencidos</small>
+                    </div>
+                    <div>
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ stats.documentos_vencendo }}</h4>
+                        <small>Documentos Vencendo</small>
+                    </div>
+                    <div>
+                        <i class="fas fa-clock fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4><i class="fas fa-check"></i></h4>
+                        <small>Sistema Ativo</small>
+                    </div>
+                    <div>
+                        <i class="fas fa-server fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-tachometer-alt"></i> Ações Rápidas</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('cadastro') }}" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Cadastrar Novo Motorista
+                    </a>
+                    <a href="{{ url_for('lista') }}" class="btn btn-secondary">
+                        <i class="fas fa-users"></i> Ver Lista de Motoristas
+                    </a>
+                    <a href="{{ url_for('backup') }}" class="btn btn-success">
+                        <i class="fas fa-download"></i> Fazer Backup dos Dados
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-search"></i> Buscar Motorista</h5>
+            </div>
+            <div class="card-body">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Digite nome ou CPF...">
+                    <button class="btn btn-outline-secondary" type="button" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div id="searchResults" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle"></i> Informações do Sistema</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Versão:</strong> 1.0.0</p>
+                <p><strong>Última Atualização:</strong> Janeiro 2025</p>
+                <p><strong>Suporte:</strong> ES Turismo - Sistema de Gestão</p>
+                <p><strong>Armazenamento:</strong> Local no PC (sem necessidade de internet)</p>
+                <p><strong>Funcionalidades:</strong></p>
+                <ul>
+                    <li>Cadastro completo de motoristas com foto</li>
+                    <li>Upload de documentos (CNH, Curso de Passageiros, Comprovante de Residência)</li>
+                    <li>Controle de vencimento de documentos com alertas</li>
+                    <li>Sistema de holerites organizados por ano/mês</li>
+                    <li>Backup automático dos dados locais</li>
+                    <li>Busca avançada e filtros</li>
+                    <li>Validação de CPF brasileiro</li>
+                    <li>Máscara automática para telefone</li>
+                </ul>
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>Privacidade:</strong> Todos os dados são armazenados localmente no seu computador e não são enviados para servidores externos.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
